@@ -61,12 +61,13 @@
   $('#theme').addEventListener('click', function () { setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); });
 
   /* ---------- Routing ---------- */
-  var VIEWS = ['matrix', 'models', 'demo', 'compare', 'exposure', 'build', 'choose', 'sources'];
+  var VIEWS = ['flow', 'matrix', 'models', 'demo', 'compare', 'exposure', 'build', 'choose', 'sources'];
   var explorerMounted = false;
   function show(v) {
-    if (VIEWS.indexOf(v) < 0) v = 'matrix';
+    if (VIEWS.indexOf(v) < 0) v = 'flow';
     $$('.view').forEach(function (s) { s.hidden = s.dataset.v !== v; });
     $$('.tab').forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.view === v)); });
+    if (v === 'flow' && window.mountFlow) window.mountFlow($('#flow')); else if (window.pauseFlow) window.pauseFlow();
     if (v === 'demo' && !explorerMounted && window.mountExplorer) { window.mountExplorer($('#explorer')); explorerMounted = true; }
   }
   window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
@@ -102,18 +103,37 @@
       '<td class="c-llm">' + (p.byo ? G('yes', 'Yes') : p.byoPart ? G('part', 'Option') : NO) + '</td>' +
       '<td class="route">' + esc(p.route) + '</td></tr>';
   }
-  function matches(p) {
-    if (cat !== 'all' && p.group !== cat) return false;
-    if (mode === 'llm' && !p.smart) return false;
-    if (mode === 'plain' && p.smart) return false;
-    if (mode === 'sem' && !p.semantic) return false;
-    if (mode === 'byo' && !p.byo) return false;
+  function matches(p, skip) {
+    if (skip !== 'cat' && cat !== 'all' && p.group !== cat) return false;
+    var m = skip === 'mode' ? 'all' : (typeof skip === 'string' && skip.indexOf('m:') === 0 ? skip.slice(2) : mode);
+    if (m === 'llm' && !p.smart) return false;
+    if (m === 'plain' && p.smart) return false;
+    if (m === 'sem' && !p.semantic) return false;
+    if (m === 'byo' && !p.byo) return false;
     if (term && JSON.stringify(p).toLowerCase().indexOf(term) < 0) return false;
     return true;
   }
+  function updateCounts() {
+    // Category chips count what the current Show filter and search would list
+    $$('#cats .chip').forEach(function (b) {
+      var c = b.dataset.c;
+      var n = P.filter(function (p) { return matches(p, 'cat') && (c === 'all' || p.group === c); }).length;
+      $('.n', b).textContent = n;
+      b.toggleAttribute('data-zero', n === 0);
+    });
+    // Show buttons count what the current category and search would list
+    $$('#show button').forEach(function (b) {
+      var n = P.filter(function (p) { return matches(p, 'm:' + b.dataset.s); }).length;
+      var el = $('.n', b);
+      if (!el) { el = document.createElement('span'); el.className = 'n'; b.appendChild(el); }
+      el.textContent = n;
+      b.toggleAttribute('data-zero', n === 0);
+    });
+  }
   function renderMatrix() {
+    updateCounts();
     var order = $('#order').value;
-    var list = P.filter(matches);
+    var list = P.filter(function (p) { return matches(p); });
     var html = '';
     if (order === 'type') {
       A.groups.forEach(function (g) {
@@ -128,7 +148,8 @@
       });
       html = list.map(row).join('');
     }
-    $('#mx tbody').innerHTML = html || '<tr><td colspan="9" class="empty">No product matches. Try another type or clear the search.</td></tr>';
+    var why = mode !== 'all' ? 'No ' + (cat === 'all' ? 'product' : A.groups.filter(function (g) { return g.id === cat; })[0].name.toLowerCase()) + ' matches "' + $('#show button[aria-pressed="true"]').firstChild.textContent.trim() + '". Switch Show to All or pick another type.' : 'No product matches. Try another type or clear the search.';
+    $('#mx tbody').innerHTML = html || '<tr><td colspan="9" class="empty">' + why + '</td></tr>';
     $('#count').textContent = list.length + ' of ' + P.length;
     if (current) { var r = $('#mx tr[data-id="' + current + '"]'); if (r) r.setAttribute('aria-current', 'true'); }
   }
@@ -163,7 +184,7 @@
   function tags(p) {
     return '<span class="st ' + stClass(p.mcp || '') + '">MCP ' + esc(p.mcp || '') + '</span>' +
       (p.semantic ? '<span class="st ga">Semantic object</span>' : '') +
-      (p.smart ? '<span class="st" style="background:var(--amber-soft);color:var(--amber);box-shadow:none">Second LLM on MCP</span>' : p.uiOnly ? '<span class="st">LLM in UI only</span>' : '<span class="st">Plain MCP</span>');
+      (p.smart ? '<span class="st" style="background:var(--amber-soft);color:var(--amber);box-shadow:none">Smart MCP</span>' : p.uiOnly ? '<span class="st">Plain MCP, AI in UI only</span>' : '<span class="st">Plain MCP</span>');
   }
   function openDrawer(id) {
     var p = byId[id]; if (!p) return;
@@ -175,7 +196,7 @@
       : '<p>None. Nothing on the platform side runs a model.</p>';
     $('#d-body').innerHTML =
       '<div class="dsec plain"><h4>Plain MCP tools</h4>' + ul(p.plain) + '</div>' +
-      '<div class="dsec smart"><h4>Second LLM</h4>' + smartHtml + (p.bill ? '<p class="bill">' + p.bill + '</p>' : '') + '</div>' +
+      '<div class="dsec smart"><h4>Smart MCP tools</h4>' + smartHtml + (p.bill ? '<p class="bill">' + p.bill + '</p>' : '') + '</div>' +
       '<div class="dsec do"><h4>One-LLM setup</h4><p>' + p.setup + '</p></div>' +
       '<div class="dsec"><h4>Sources</h4><div class="dsrc">' + (p.src.length ? p.src.map(function (s) { return '<a href="' + s[1] + '" target="_blank" rel="noopener">' + esc(s[0]) + '</a>'; }).join('') : '<span class="muted">No primary source found; community projects only.</span>') + '</div></div>';
     $('#drawer').setAttribute('data-open', ''); $('#drawer').setAttribute('aria-hidden', 'false'); $('#scrim').setAttribute('data-open', '');
@@ -191,7 +212,7 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && $('#drawer').hasAttribute('data-open')) closeDrawer(); });
   document.addEventListener('click', function (e) { var b = e.target.closest('[data-open-id]'); if (b) openDrawer(b.dataset.openId); });
 
-  /* ---------- Second LLM view ---------- */
+  /* ---------- Smart MCP models view ---------- */
   var ORDER = ['azure', 'gemini', 'claude', 'openai', 'bedrock', 'multi', 'byo', 'unnamed'];
   var COLORS = { azure: '#4ea8ff', gemini: '#a78bfa', claude: '#e3926b', openai: 'var(--fg)', bedrock: '#f59e0b', multi: '#2dd4bf', byo: '#86efac', unnamed: '#7183a0' };
   var groups = ORDER.map(function (k) { return { k: k, ps: P.filter(function (p) { return p.smart && p.model === k; }) }; }).filter(function (g) { return g.ps.length; });
@@ -207,8 +228,8 @@
 
   /* ---------- Map ---------- */
   var rowsDef = [
-    { k: 'one', b: 'Your client’s model', s: 'One LLM. Claude, GPT or whatever your client runs.' },
-    { k: 'two', b: 'The platform’s model', s: 'Two LLMs. The tool runs its own model first.' }
+    { k: 'one', b: 'Your client’s model', s: 'Plain MCP: one LLM, whatever your client runs.' },
+    { k: 'two', b: 'The platform’s model', s: 'Smart MCP: two LLMs. The tool runs its own model first.' }
   ];
   var cols = ['Raw schema', 'Catalog context', 'Semantic layer'];
   var mh = '';
@@ -248,7 +269,7 @@
       ['In one line', function (p) { return p.line; }],
       ['Plain tools', function (p) { return ul(p.plain); }],
       ['Semantic object', function (p) { return p.semantic ? 'Yes' : 'No'; }],
-      ['Second LLM', function (p) { return p.smart ? ul(p.smartTools) : p.uiOnly ? 'Only in the product UI' : 'None'; }],
+      ['Smart MCP', function (p) { return p.smart ? ul(p.smartTools) : p.uiOnly ? 'Only in the product UI' : 'None'; }],
       ['Model', function (p) { return p.smart ? '<span class="model"><i class="mdot m-' + p.model + '"></i>' + A.models[p.model][0] + '</span>' : '<span class="dash">None</span>'; }],
       ['Billing', function (p) { return p.bill || '<span class="dash">Compute only</span>'; }],
       ['One-LLM setup', function (p) { return p.setup; }]
@@ -304,7 +325,7 @@
   function recommend() {
     var r = A.recommend(form.who.value, form.sem.value, form.data.value);
     $('#rec').innerHTML = '<div class="eyebrow" style="color:var(--fg-3)">Recommended setup</div><h3>' + r.title + '</h3><span class="pill ' + (r.llms === 2 ? 'two' : 'one') + '">' +
-      (r.llms === 2 ? 'Two LLMs for the business-user path' : 'One LLM') + '</span><p>' + r.why + '</p>' + ul(r.steps);
+      (r.llms === 2 ? 'Smart MCP for the business-user path' : 'Plain MCP, one LLM') + '</span><p>' + r.why + '</p>' + ul(r.steps);
   }
   form.addEventListener('change', recommend);
   form.addEventListener('submit', function (e) { e.preventDefault(); });

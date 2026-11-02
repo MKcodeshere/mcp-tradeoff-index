@@ -375,3 +375,63 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
   .chiprow::-webkit-scrollbar, .seg::-webkit-scrollbar { display: none; }
   .ctrlrow .legend { margin-left: 0; }
 }
+
+.chip[data-zero]:not([aria-pressed="true"]), .seg button[data-zero]:not([aria-pressed="true"]) { opacity: 0.45; }
+.seg button .n { margin-left: 6px; font: 0.72rem/1 var(--mono); opacity: 0.7; }
+
+/* ---------- Flow view ---------- */
+.flow { display: grid; gap: 16px; }
+.fchart { border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); overflow: hidden; min-width: 0; }
+.fhead { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: end; justify-content: space-between; padding: 16px 20px 6px; }
+.fhead h3 { font-size: 1.1rem; line-height: 1.25; margin-top: 6px; }
+.fkind { display: inline-block; padding: 2px 9px; border-radius: 999px; font: 600 0.72rem/1.5 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.fkind.one { background: var(--teal-soft); color: var(--teal); } .fkind.two { background: var(--amber-soft); color: var(--amber); }
+.ffacts { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 0; }
+.ffacts div { display: grid; gap: 1px; }
+.ffacts dt { color: var(--fg-3); font: 0.68rem/1.3 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.ffacts dd { margin: 0; font-size: 0.88rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+.ffacts dd.bad { color: var(--coral); } .ffacts dd.amber { color: var(--amber); }
+.fhead .ffacts dd { white-space: nowrap; }
+.fsvg { overflow-x: auto; padding: 0 8px; }
+.fsvg svg { display: block; width: 100%; min-width: 860px; height: auto; }
+.fsteps { margin: 0; padding: 4px 20px 16px 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 24px; color: var(--fg-3); font-size: 0.84rem; line-height: 1.4; }
+.fsteps li { padding: 3px 0; transition: color 200ms ease; }
+.fsteps li::marker { font: 600 0.78rem var(--mono); }
+.fsteps li[data-done] { color: var(--fg-2); }
+.fsteps li[data-on] { color: var(--fg); }
+[data-flow="plain"] .fsteps li[data-on]::marker { color: var(--teal); } [data-flow="smart"] .fsteps li[data-on]::marker { color: var(--amber); }
+@media (max-width: 900px) { .fsteps { grid-template-columns: minmax(0, 1fr); } }
+
+.flane { stroke: var(--line-2); stroke-width: 1.5; stroke-dasharray: 3 5; }
+.fn-box { fill: var(--panel-2); stroke: var(--line-2); stroke-width: 1.2; transition: stroke 250ms ease, fill 250ms ease; }
+.fn-title { fill: var(--fg); font: 600 15px var(--display); }
+.fn-sub { fill: var(--fg-3); font: 12px var(--body); }
+.fn-eyebrow { fill: var(--fg-3); font: 600 11px var(--mono); letter-spacing: 0.1em; }
+.fn-chip { fill: var(--panel); stroke: var(--line-2); }
+.fn-chiptext { fill: var(--fg); font: 500 13px var(--body); }
+.fn[data-on] .fn-box { stroke: var(--accent); }
+.fn-llm[data-on] .fn-box { stroke: var(--teal); fill: color-mix(in srgb, var(--teal) 10%, var(--panel-2)); }
+.fn-plat .fn-box { stroke: color-mix(in srgb, var(--amber) 50%, transparent); }
+.fn-plat[data-on] .fn-box { stroke: var(--amber); fill: color-mix(in srgb, var(--amber) 12%, var(--panel-2)); }
+.fn-plat .fn-title { fill: var(--amber); }
+.fn-llm .fn-title { fill: var(--teal); }
+.fn-ghost .fn-box { fill: none; stroke-dasharray: 5 5; stroke: var(--line-2); }
+.fn-ghost .fn-title { fill: var(--fg-3); font-weight: 500; }
+.fn-tick { fill: none; stroke: var(--amber); stroke-width: 1.5; transition: fill 200ms ease; }
+.fn-tick[data-on] { fill: var(--amber); }
+.fthink circle { fill: var(--teal); opacity: 0; }
+.fthink[data-think="plat"] circle { fill: var(--amber); }
+.fthink[data-on] circle { animation: blink 0.9s ease-in-out infinite; }
+@keyframes blink { 0%, 100% { opacity: 0.2; } 50% { opacity: 1; } }
+.fpk-dot { stroke: var(--panel); stroke-width: 2; }
+.fpk-label { font: 500 12px var(--mono); }
+.fpk-bg { stroke-width: 1; }
+.fpk-q .fpk-dot, .fpk-sql .fpk-dot { fill: var(--accent); } .fpk-q .fpk-bg, .fpk-sql .fpk-bg { fill: var(--panel); stroke: var(--accent); } .fpk-q .fpk-label, .fpk-sql .fpk-label { fill: var(--fg); }
+.fpk-rows .fpk-dot { fill: var(--coral); } .fpk-rows .fpk-bg { fill: var(--panel); stroke: var(--coral); } .fpk-rows .fpk-label { fill: var(--coral); }
+.fpk-data .fpk-dot { fill: var(--fg-2); } .fpk-data .fpk-bg { fill: var(--panel); stroke: var(--line-2); } .fpk-data .fpk-label { fill: var(--fg-2); }
+.fpk-smart .fpk-dot { fill: var(--amber); } .fpk-smart .fpk-bg { fill: var(--panel); stroke: var(--amber); } .fpk-smart .fpk-label { fill: var(--amber); }
+.fpk-rows-in .fpk-dot { fill: var(--fg-3); } .fpk-rows-in .fpk-bg { fill: var(--panel); stroke: var(--line-2); } .fpk-rows-in .fpk-label { fill: var(--fg-2); }
+.fpk-ans .fpk-dot { fill: var(--teal); } .fpk-ans .fpk-bg { fill: var(--panel); stroke: var(--teal); } .fpk-ans .fpk-label { fill: var(--teal); }
+.fpk-ans-bad .fpk-dot { fill: var(--coral); } .fpk-ans-bad .fpk-bg { fill: var(--panel); stroke: var(--coral); } .fpk-ans-bad .fpk-label { fill: var(--coral); }
+
+.fpk-stem { stroke: var(--line-2); stroke-width: 1; stroke-dasharray: 2 3; }

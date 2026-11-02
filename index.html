@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>MCP Tradeoff Index</title>
-<meta name="description" content="Which data platforms give coding agents plain MCP access, which run a second LLM behind the tool, whose model it is, how it bills, and how to add business context with one LLM.">
+<meta name="description" content="Plain MCP or Smart MCP on 82 data platforms: which give coding agents plain tools, which run their own LLM behind the tool, whose model it is, how it bills, and how to add business context on Plain MCP.">
 <meta property="og:title" content="MCP Tradeoff Index">
-<meta property="og:description" content="Which data platforms give coding agents plain MCP access, which run a second LLM behind the tool, whose model it is, how it bills, and how to add business context with one LLM.">
+<meta property="og:description" content="Plain MCP or Smart MCP on 82 data platforms: which give coding agents plain tools, which run their own LLM behind the tool, whose model it is, how it bills, and how to add business context on Plain MCP.">
 <meta name="theme-color" content="#070e1b">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Ccircle cx='7' cy='11' r='5.5' fill='none' stroke='%232dd4bf' stroke-width='2'/%3E%3Ccircle cx='15' cy='11' r='5.5' fill='none' stroke='%23f5b83d' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +18,7 @@
 <body>
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="#matrix" aria-label="MCP Tradeoff Index, home">
+    <a class="brand" href="#flow" aria-label="MCP Tradeoff Index, home">
       <svg width="24" height="24" viewBox="0 0 22 22" aria-hidden="true"><circle cx="7" cy="11" r="5.5" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="15" cy="11" r="5.5" fill="none" stroke="#f5b83d" stroke-width="2" stroke-dasharray="3 2.4"/></svg>
       <span>MCP Tradeoff Index</span>
     </a>
@@ -37,12 +37,12 @@
   <div class="wrap">
     <div>
       <div class="eyebrow">Reference · checked 2026-11-02</div>
-      <h1>MCP on data platforms: <em>one LLM or two?</em></h1>
-      <p>Which data platforms give a coding agent plain access over MCP, which run their own LLM behind the tool, whose model that is and how it bills, and how to add business context without paying for a second model. Built on the 65-product Semantic Context Index, plus 17 more products.</p>
+      <h1>Plain MCP or <em>Smart MCP</em>?</h1>
+      <p><b style="color:var(--teal)">Plain MCP</b> gives your coding agent tools: run SQL, list tables, query a metric. Your agent's model does the reasoning. <b style="color:var(--amber)">Smart MCP</b> tools run the platform's own LLM behind the call, so a second model plans and writes the SQL, and it bills separately. This index shows which you get on 82 data platforms, whose model runs it, and how to add business context while staying on Plain MCP.</p>
     </div>
     <div class="stats" aria-label="Summary">
       <div><b id="s-n">0</b><span>products</span></div>
-      <div><b id="s-llm" style="color:var(--amber)">0</b><span>run a second LLM on MCP</span></div>
+      <div><b id="s-llm" style="color:var(--amber)">0</b><span>offer Smart MCP tools</span></div>
       <div><b id="s-sem" style="color:var(--teal)">0</b><span>with a semantic object</span></div>
       <div><b id="s-prov">0</b><span>model providers behind tools</span></div>
     </div>
@@ -51,8 +51,9 @@
 
 <nav class="tabs" aria-label="Views">
   <div class="wrap" role="tablist">
+    <a class="tab" role="tab" href="#flow" data-view="flow">Plain vs Smart MCP</a>
     <a class="tab" role="tab" href="#matrix" data-view="matrix">MCP matrix</a>
-    <a class="tab" role="tab" href="#models" data-view="models">Second LLM</a>
+    <a class="tab" role="tab" href="#models" data-view="models">Smart MCP models</a>
     <a class="tab" role="tab" href="#demo" data-view="demo">One question, three setups</a>
     <a class="tab" role="tab" href="#compare" data-view="compare">Compare</a>
     <a class="tab" role="tab" href="#exposure" data-view="exposure">Data exposure</a>
@@ -63,8 +64,53 @@
 </nav>
 
 <main class="wrap">
+  <!-- FLOW -->
+  <section class="view" id="v-flow" data-v="flow" aria-labelledby="h-flow">
+    <div class="vhead">
+      <div>
+        <h2 id="h-flow">Where the reasoning happens</h2>
+        <p>The same question from Cursor, Claude Code, Codex or Pi. With <b style="color:var(--teal)">Plain MCP</b>, your client's model writes every query and reads the rows. With <b style="color:var(--amber)">Smart MCP</b>, the tool hands the question to the platform's own model, which writes the SQL for you.</p>
+      </div>
+      <div class="ctrlrow"><button class="xp-replay" id="flow-play" type="button" aria-pressed="true">Pause</button></div>
+    </div>
+    <div class="flow" id="flow">
+      <article class="fchart" data-flow="plain" aria-labelledby="fc-plain">
+        <header class="fhead">
+          <div><span class="fkind one">Plain MCP</span><h3 id="fc-plain">Your model reasons, the MCP server only executes</h3></div>
+          <dl class="ffacts">
+            <div><dt>Models</dt><dd>1</dd></div>
+            <div><dt>Tool calls</dt><dd data-calls>0</dd></div>
+            <div><dt>Writes the SQL</dt><dd>Your client's model</dd></div>
+            <div><dt>Rows go to</dt><dd class="bad">Your model provider</dd></div>
+            <div><dt>You pay</dt><dd>Tokens, warehouse</dd></div>
+          </dl>
+        </header>
+        <div class="fsvg"><svg role="img" aria-label="Plain MCP data flow: AI clients, your client's model, MCP server, data platform"></svg></div>
+        <ol class="fsteps"></ol>
+      </article>
+      <article class="fchart" data-flow="smart" aria-labelledby="fc-smart">
+        <header class="fhead">
+          <div><span class="fkind two">Smart MCP</span><h3 id="fc-smart">The platform's model reasons inside the tool</h3></div>
+          <dl class="ffacts">
+            <div><dt>Models</dt><dd class="amber">2</dd></div>
+            <div><dt>Tool calls</dt><dd data-calls>0</dd></div>
+            <div><dt>Writes the SQL</dt><dd>The platform's model</dd></div>
+            <div><dt>Rows go to</dt><dd>Platform model, then a summary to yours</dd></div>
+            <div><dt>You pay</dt><dd class="amber">Tokens, warehouse, AI credits</dd></div>
+          </dl>
+        </header>
+        <div class="fsvg"><svg role="img" aria-label="Smart MCP data flow: AI clients, your client's model, MCP server, platform's model, data platform"></svg></div>
+        <ol class="fsteps"></ol>
+      </article>
+    </div>
+    <div class="grid2">
+      <div class="callout teal"><b>Plain MCP is not the weak option.</b> Give it a semantic layer and it returns governed numbers with one model. The matrix shows which platforms let you do that and the Add context tab shows how.</div>
+      <div class="callout amber"><b>Smart MCP earns its cost</b> when the person asking has no AI client of their own, or when you want the vendor to own answer quality on a curated dataset. Check the Smart MCP models tab for whose model it is.</div>
+    </div>
+  </section>
+
   <!-- MATRIX -->
-  <section class="view" id="v-matrix" data-v="matrix" aria-labelledby="h-matrix">
+  <section class="view" id="v-matrix" data-v="matrix" hidden aria-labelledby="h-matrix">
     <div class="vhead">
       <div>
         <h2 id="h-matrix">MCP matrix</h2>
@@ -76,19 +122,19 @@
       <div class="ctrlrow">
         <div class="seg" id="show" role="group" aria-label="Show">
           <button type="button" data-s="all" aria-pressed="true">All</button>
-          <button type="button" data-s="llm" aria-pressed="false">Second LLM on MCP</button>
+          <button type="button" data-s="llm" aria-pressed="false">Smart MCP</button>
           <button type="button" data-s="plain" aria-pressed="false">Plain MCP only</button>
           <button type="button" data-s="sem" aria-pressed="false">Has semantic object</button>
           <button type="button" data-s="byo" aria-pressed="false">Bring your own model</button>
         </div>
         <label><span class="sr">Order</span>
-          <select id="order"><option value="type">Order by product type</option><option value="name">Order by name</option><option value="llm">Second LLM first</option></select>
+          <select id="order"><option value="type">Order by product type</option><option value="name">Order by name</option><option value="llm">Smart MCP first</option></select>
         </label>
 <div class="legend" aria-label="Legend">
           <span><i class="g g-yes"></i>Yes</span>
           <span><i class="g g-part"></i>Preview or option</span>
-          <span><i class="g g-llm"></i>Runs the vendor's LLM</span>
-          <span><i class="g g-ui"></i>LLM in product UI only</span>
+          <span><i class="g g-llm"></i>Smart MCP: runs the vendor's LLM</span>
+          <span><i class="g g-ui"></i>AI in product UI only</span>
           <span><i class="g g-no"></i>No</span>
         </div>
         <span class="count" id="count"></span>
@@ -99,8 +145,8 @@
         <thead>
           <tr>
             <th class="grp" rowspan="1"></th>
-            <th class="grp" colspan="3">Plain access</th>
-            <th class="grp two" colspan="4">Second LLM</th>
+            <th class="grp one" colspan="3">Plain MCP</th>
+            <th class="grp two" colspan="4">Smart MCP</th>
             <th class="grp one" colspan="1">One-LLM route</th>
           </tr>
           <tr>
@@ -108,8 +154,8 @@
             <th scope="col">MCP server</th>
             <th scope="col">Query tools</th>
             <th scope="col">Semantic object</th>
-            <th scope="col">LLM tool on MCP</th>
-            <th scope="col">LLM in UI only</th>
+            <th scope="col">Smart MCP tool</th>
+            <th scope="col">AI in UI only</th>
             <th scope="col">Model behind it</th>
             <th scope="col">Bring your own</th>
             <th scope="col" style="text-align:left">What to connect instead</th>
@@ -123,8 +169,8 @@
   <!-- MODELS -->
   <section class="view" id="v-models" data-v="models" hidden aria-labelledby="h-models">
     <div class="vhead"><div>
-      <h2 id="h-models">Whose model runs behind the smart tools</h2>
-      <p>When an MCP tool runs the vendor's model, your question and often your rows reach that model as well as your client's. Counts cover tools reachable over MCP, as documented on 2 November 2026.</p>
+      <h2 id="h-models">Whose model runs inside Smart MCP tools</h2>
+      <p>When a Smart MCP tool runs, your question and often your rows reach the platform's model as well as your client's. Counts cover tools reachable over MCP, as documented on 2 November 2026.</p>
     </div></div>
     <div class="grid2">
       <div class="panel pad"><div class="bars" id="bars"></div></div>
@@ -132,8 +178,8 @@
     </div>
     <div class="mgrid" id="mgrid"></div>
     <div class="vhead"><div>
-      <h2>How the second LLM is billed</h2>
-      <p>The MCP server is usually free. Plain tools cost compute; smart tools add an AI charge, and your client's tokens don't go away.</p>
+      <h2>How Smart MCP is billed</h2>
+      <p>The MCP server is usually free. Plain MCP tools cost compute; Smart MCP tools add an AI charge, and your client's tokens don't go away.</p>
     </div></div>
     <div id="cost"></div>
   </section>
@@ -142,12 +188,12 @@
   <section class="view" id="v-demo" data-v="demo" hidden aria-labelledby="h-demo">
     <div class="vhead"><div>
       <h2 id="h-demo">One question, three setups</h2>
-      <p>"How many active customers in Chennai?" asked from a coding agent over plain SQL MCP, over semantic tools, and through a platform smart tool. Select a setup to replay it.</p>
+      <p>"How many active customers in Chennai?" asked from a coding agent over Plain MCP with raw SQL, over Plain MCP with semantic tools, and through a Smart MCP tool. Select a setup to replay it.</p>
     </div></div>
     <div id="explorer" aria-label="Interactive demo"></div>
     <div class="vhead"><div>
       <h2>Two questions place every tool</h2>
-      <p>What the agent knows, and whose model writes the query. Moving right adds meaning; moving down adds a second model. Only moving right fixes the definition problem.</p>
+      <p>What the agent knows, and whose model writes the query. Moving right adds meaning; moving down turns it into Smart MCP, with a second model. Only moving right fixes the definition problem.</p>
     </div></div>
     <div class="map" id="map" role="group" aria-label="Context and reasoning map">
       <div class="map-axis">Who writes the query</div>
@@ -162,7 +208,7 @@
   <section class="view" id="v-compare" data-v="compare" hidden aria-labelledby="h-compare">
     <div class="vhead"><div>
       <h2 id="h-compare">Compare products</h2>
-      <p>Pick up to three products to see their MCP tools, second-LLM tools, model, billing and one-LLM setup side by side.</p>
+      <p>Pick up to three products to see their MCP tools, Smart MCP tools, model, billing and one-LLM setup side by side.</p>
     </div></div>
     <div class="cmp-pick" id="cmp-pick"></div>
     <div class="tbl-wrap"><table class="cmp" id="cmp"></table></div>
@@ -172,7 +218,7 @@
   <section class="view" id="v-exposure" data-v="exposure" hidden aria-labelledby="h-exposure">
     <div class="vhead"><div>
       <h2 id="h-exposure">What your model provider sees</h2>
-      <p>Every byte a tool returns goes into your client's context and on to its provider. A smart tool doesn't change that: its answer still comes back to your client, and the platform's model sees the data on the way.</p>
+      <p>Every byte a tool returns goes into your client's context and on to its provider. Smart MCP doesn't change that: its answer still comes back to your client, and the platform's model sees the data on the way.</p>
     </div></div>
     <div class="grid2">
       <div style="display:grid;gap:14px;align-content:start">
@@ -269,7 +315,7 @@
     </div></div>
     <div class="method panel pad">
       <div><h4>Method</h4><p>The 65 products and their MCP and NL-to-SQL findings come from the Semantic Context Index (checked 24 Oct 2026). Research agents added 17 products and re-checked MCP tool lists, the model behind each AI tool and billing against vendor docs on 2 Nov 2026.</p></div>
-      <div><h4>What counts as a second LLM</h4><p>A tool on the vendor's MCP server that sends your question to a model the vendor runs or you configure on the vendor side. AI features that exist only in the product's own UI are marked separately, because a coding agent never calls them.</p></div>
+      <div><h4>What counts as Smart MCP</h4><p>A tool on the vendor's MCP server that sends your question to a model the vendor runs or you configure on the vendor side. AI features that exist only in the product's own UI are marked separately, because a coding agent never calls them.</p></div>
       <div><h4>Corrections</h4><p>Preview features and prices change monthly. Check the linked source before a production decision, and open an issue with a primary source if a cell is wrong.</p></div>
     </div>
     <div class="src-grid" id="src"></div>
@@ -278,7 +324,7 @@
 
 <footer>
   <div class="wrap">
-    <span>MCP Tradeoff Index · plain access or a second LLM, platform by platform</span>
+    <span>MCP Tradeoff Index · Plain MCP or Smart MCP, platform by platform</span>
     <span>Checked 2 Nov 2026 · companion to the <a href="https://mkcodeshere.github.io/semantic-layer-compare/">Semantic Context Index</a></span>
   </div>
 </footer>
@@ -296,6 +342,7 @@
 
 <script src="assets/data.js"></script>
 <script src="assets/explorer.js"></script>
+<script src="assets/flow.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>
