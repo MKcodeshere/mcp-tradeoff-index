@@ -52,6 +52,7 @@
 <nav class="tabs" aria-label="Views">
   <div class="wrap" role="tablist">
     <a class="tab" role="tab" href="#flow" data-view="flow">Plain vs Smart MCP</a>
+    <a class="tab" role="tab" href="#patterns" data-view="patterns">Architecture patterns</a>
     <a class="tab" role="tab" href="#matrix" data-view="matrix">MCP matrix</a>
     <a class="tab" role="tab" href="#models" data-view="models">Smart MCP models</a>
     <a class="tab" role="tab" href="#demo" data-view="demo">One question, three setups</a>
@@ -76,6 +77,38 @@
     <div class="grid2">
       <div class="callout teal"><b>Plain MCP is not the weak option.</b> Give it a semantic layer and it returns governed numbers with one model. The matrix shows which platforms let you do that and the Add context tab shows how.</div>
       <div class="callout amber"><b>Smart MCP earns its cost</b> when the person asking has no AI client of their own, or when you want the vendor to own answer quality on a curated dataset. Check the Smart MCP models tab for whose model it is.</div>
+    </div>
+  </section>
+
+  <!-- PATTERNS -->
+  <section class="view" id="v-patterns" data-v="patterns" hidden aria-labelledby="h-patterns">
+    <div class="vhead"><div>
+      <h2 id="h-patterns">Architecture patterns for enterprise data MCP</h2>
+      <p>For CDOs, CTOs and data architects. Coding agents are only one front end: many teams build their own portals and assistants that call tools, and some apps have no LLM at all. Each pattern puts the reasoning, the bill and the accountability in a different place.</p>
+    </div></div>
+    <div class="pgrid"><article class="pcard" data-tone="one"><header><span class="pnum">1</span><h3>Coding agents + Plain MCP</h3></header><div class="ppath"><span class="pn ">Claude Code, Codex, Cursor, Pi</span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn llm1">Your model</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Plain MCP + semantic layer</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Data platform</span></span></div><p>Engineers and analysts work in their own agent. Governed metrics come from a semantic layer, so numbers match finance with one model.</p><dl class="pkv"><div><dt>LLMs</dt><dd>1, yours</dd></div><div><dt>Cost</dt><dd>Client tokens, warehouse</dd></div><div><dt>Accuracy owner</dt><dd>Your semantic layer</dd></div><div><dt>Best for</dt><dd>Data teams, analytics engineering</dd></div></dl></article><article class="pcard" data-tone="two"><header><span class="pnum">2</span><h3>Coding agents + Smart MCP</h3></header><div class="ppath"><span class="pn ">Claude Code, Codex, Cursor, Pi</span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn llm1">Your model</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Smart MCP tool</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn llm2">Platform model</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Data platform</span></span></div><p>One tool call hands the question to the platform's analyst or agent. Fast to roll out where the vendor's curated semantic model is already good.</p><dl class="pkv"><div><dt>LLMs</dt><dd>2</dd></div><div><dt>Cost</dt><dd>Tokens, AI credits, warehouse</dd></div><div><dt>Accuracy owner</dt><dd>Vendor, on your semantic model</dd></div><div><dt>Best for</dt><dd>Quick wins on one platform</dd></div></dl></article><article class="pcard" data-tone="one"><header><span class="pnum">3</span><h3>Your own app on an LLM API + Plain MCP</h3></header><div class="ppath"><span class="pn ">Your app or portal</span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn llm1">Model you choose</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Plain MCP + semantic layer</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Data platforms</span></span></div><p>An internal assistant built on the Claude API, OpenAI Responses API, Azure AI Foundry, Amazon Bedrock or Google ADK, calling remote MCP servers. You pick the model, region and cost caps, and you own prompts and evals.</p><dl class="pkv"><div><dt>LLMs</dt><dd>1, the one you choose</dd></div><div><dt>Cost</dt><dd>Your model bill, warehouse</dd></div><div><dt>Accuracy owner</dt><dd>You: semantic layer and evals</dd></div><div><dt>Best for</dt><dd>Enterprise assistants across several platforms</dd></div></dl></article><article class="pcard" data-tone="two"><header><span class="pnum">4</span><h3>Your own app with no LLM + platform agent API</h3></header><div class="ppath"><span class="pn ">Your app or portal</span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Platform agent API</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn llm2">Platform model</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Data platform</span></span></div><p>The app sends questions straight to the platform's agent: Snowflake Cortex Agents, Databricks Genie, Google Conversational Analytics or a Fabric data agent. Least to build; quality, model and bill sit with the vendor.</p><dl class="pkv"><div><dt>LLMs</dt><dd>1, the platform's</dd></div><div><dt>Cost</dt><dd>AI credits, warehouse</dd></div><div><dt>Accuracy owner</dt><dd>Vendor</dd></div><div><dt>Best for</dt><dd>Business users on one platform</dd></div></dl></article><article class="pcard" data-tone="one"><header><span class="pnum">5</span><h3>MCP gateway in front of everything</h3></header><div class="ppath"><span class="pn ">Any client or app</span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">MCP gateway</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">Plain and Smart MCP servers</span></span><span class="pstep"><i class="pa" aria-hidden="true"></i><span class="pn ">All data platforms</span></span></div><p>A central gateway or registry handles identity, tool allow-lists per persona, audit logs and budgets. Coding agents get Plain MCP; business apps can reach Smart MCP. The mature end state for most enterprises.</p><dl class="pkv"><div><dt>LLMs</dt><dd>1 or 2, per persona</dd></div><div><dt>Cost</dt><dd>Visible per team and tool</dd></div><div><dt>Accuracy owner</dt><dd>Shared semantic layer</dd></div><div><dt>Best for</dt><dd>Several platforms, several audiences</dd></div></dl></article></div>
+    <div class="vhead"><div><h2>Tradeoffs side by side</h2><p>The same criteria for every pattern. Most enterprises end up running two or three of them behind one gateway.</p></div></div>
+    <div class="tbl-wrap"><table class="tbl ptbl"><thead><tr><th></th><th>1 · Agents + Plain</th><th>2 · Agents + Smart</th><th>3 · Own app + LLM API</th><th>4 · Own app, no LLM</th><th>5 · Gateway</th></tr></thead><tbody><tr><td>Who writes the SQL</td><td>Your model, through the semantic layer</td><td>Platform model</td><td>Your model, through the semantic layer</td><td>Platform model</td><td>Depends on persona</td></tr><tr><td>Models in the path</td><td>1</td><td>2</td><td>1</td><td>1</td><td>1 or 2</td></tr><tr><td>Main cost driver</td><td>Client tokens</td><td>Tokens plus AI credits</td><td>Your model bill</td><td>AI credits</td><td>Mixed, metered per team</td></tr><tr><td>Who owns accuracy</td><td>Your semantic layer</td><td>Vendor</td><td>You (evals)</td><td>Vendor</td><td>Shared semantic layer</td></tr><tr><td>Residency control</td><td>Client provider terms</td><td>Client terms plus platform region settings</td><td>Full: you pick model and region</td><td>Platform region settings</td><td>Policy in the gateway</td></tr><tr><td>Identity</td><td>Per-user OAuth to MCP</td><td>Per-user OAuth to MCP</td><td>App identity or user passthrough</td><td>App identity or user passthrough</td><td>Central, per user</td></tr><tr><td>Works across platforms</td><td>Yes</td><td>One platform per tool</td><td>Yes</td><td>One platform</td><td>Yes</td></tr><tr><td>Build effort</td><td>Low to medium</td><td>Low</td><td>Medium to high</td><td>Low</td><td>High</td></tr><tr><td>Lock-in</td><td>Low</td><td>Medium</td><td>Low</td><td>High</td><td>Low</td></tr></tbody></table></div>
+    <div class="grid2">
+      <div class="panel pad">
+        <h3 style="font-size:1.1rem;margin-bottom:4px">Rollout path</h3>
+        <ol class="steps">
+          <li><div><b>Weeks 1 to 4: prove it read-only</b><span>One platform, Plain MCP, a read-only role, column comments and audit logs. Write 30 real business questions with known answers as your eval set.</span></div></li>
+          <li><div><b>Months 2 to 3: govern the numbers</b><span>Expose the semantic layer as tools, add per-user OAuth, masking policies and a gateway. Track tool calls and cost per team. Rerun the eval set on every change.</span></div></li>
+          <li><div><b>Then: add Smart MCP where it wins</b><span>Offer platform agents to business users with budgets. Run the same eval set through Smart MCP and Plain MCP and keep whichever is more accurate per domain.</span></div></li>
+        </ol>
+      </div>
+      <div class="panel pad">
+        <h3 style="font-size:1.1rem;margin-bottom:4px">Architect's checklist</h3>
+        <ol class="steps">
+          <li><div><b>Identity</b><span>Per-user OAuth so row and column policies apply to the person asking, not a shared service account.</span></div></li>
+          <li><div><b>Least privilege</b><span>Read-only roles, tool allow-lists per persona, no write tools for analytics agents.</span></div></li>
+          <li><div><b>Untrusted tool output</b><span>Rows and documents can carry prompt injection. Treat tool results as data, and never let them trigger write or send tools without a human.</span></div></li>
+          <li><div><b>Cost guardrails</b><span>Budgets and alerts on platform AI services, row and byte caps on queries, per-team usage views.</span></div></li>
+          <li><div><b>Residency and terms</b><span>Check cross-region inference settings on each platform and zero data retention terms with every model provider in the path.</span></div></li>
+          <li><div><b>Evals and audit</b><span>A fixed question set with expected answers, run on every model, prompt or semantic layer change, and a log of every tool call.</span></div></li>
+        </ol>
+      </div>
     </div>
   </section>
 
@@ -253,19 +286,25 @@
   <section class="view" id="v-choose" data-v="choose" hidden aria-labelledby="h-choose">
     <div class="vhead"><div>
       <h2 id="h-choose">Which setup fits</h2>
-      <p>Three questions. The recommendation updates as you pick.</p>
+      <p>Four questions, including your front end and what you optimise for. The recommendation names one of the five architecture patterns.</p>
     </div></div>
     <div class="chooser">
       <form class="qs" id="qs">
-        <fieldset><legend>Who asks the questions?</legend>
-          <label class="opt"><input type="radio" name="who" id="who-dev" value="dev" checked> Engineers and analysts, from a coding agent</label>
-          <label class="opt"><input type="radio" name="who" id="who-biz" value="biz"> Business users with no AI client of their own</label>
-          <label class="opt"><input type="radio" name="who" id="who-both" value="both"> Both</label>
+        <fieldset><legend>What is the front end?</legend>
+          <label class="opt"><input type="radio" name="front" id="front-coding" value="coding" checked> Coding agents: Claude Code, Codex, Cursor, Pi</label>
+          <label class="opt"><input type="radio" name="front" id="front-app" value="app"> Our own app or portal, built on an LLM API</label>
+          <label class="opt"><input type="radio" name="front" id="front-nollm" value="nollm"> Our own app with no LLM of its own</label>
+          <label class="opt"><input type="radio" name="front" id="front-mixed" value="mixed"> Several of these, for different teams</label>
         </fieldset>
         <fieldset><legend>Where do metric definitions live today?</legend>
           <label class="opt"><input type="radio" name="sem" id="sem-native" value="native" checked> In the platform: Snowflake semantic views, Databricks metric views</label>
           <label class="opt"><input type="radio" name="sem" id="sem-layer" value="layer"> In a BI or semantic tool: dbt, Cube, Looker, Power BI, Tableau</label>
           <label class="opt"><input type="radio" name="sem" id="sem-none" value="none"> Nowhere yet, or in people's heads</label>
+        </fieldset>
+        <fieldset><legend>What matters most?</legend>
+          <label class="opt"><input type="radio" name="prio" id="prio-cost" value="cost" checked> Lowest running cost and no lock-in</label>
+          <label class="opt"><input type="radio" name="prio" id="prio-speed" value="speed"> Fastest to ship</label>
+          <label class="opt"><input type="radio" name="prio" id="prio-vendor" value="vendor"> The vendor owns answer quality</label>
         </fieldset>
         <fieldset><legend>What may leave your environment?</legend>
           <label class="opt"><input type="radio" name="data" id="data-rows" value="rows" checked> Row-level data, under enterprise terms</label>

@@ -10,12 +10,13 @@ plus 17 more. Checked against vendor documentation on 2 November 2026.
 ## Views
 
 - **Plain vs Smart MCP**: two animated product scenes built with the Stageshow kit. Pick Cursor, Claude Code, Codex or Pi. Plain MCP: your agent's model writes every query and the platform's query history shows each one arrive. Smart MCP: one tool call, and the platform agent's own trace shows its model planning and writing the SQL.
+- **Architecture patterns**: five enterprise patterns (coding agents with Plain or Smart MCP, your own app on an LLM API, an app with no LLM calling a platform agent API, an MCP gateway), a tradeoff table, a rollout path and an architect's checklist.
 - **MCP matrix**: every product grouped by type, with MCP status, semantic object, Smart MCP tools, the model behind them and the one-LLM route. Select a row for evidence and sources.
 - **Smart MCP models**: which provider runs the Smart MCP tools, and how each is billed.
 - **One question, three setups**: an animated demo of plain SQL MCP, semantic tools and a platform agent.
 - **Compare**, **Data exposure**, **Add context** (Snowflake, Databricks, dbt and a ClickHouse context server), **Choose a setup**, **Method and sources**.
 
-Each view has its own URL hash (`#flow`, `#matrix`, `#models`, `#demo`, `#compare`, `#exposure`, `#build`, `#choose`, `#sources`).
+Each view has its own URL hash (`#flow`, `#patterns`, `#matrix`, `#models`, `#demo`, `#compare`, `#exposure`, `#build`, `#choose`, `#sources`).
 
 ## Publish on GitHub Pages
 

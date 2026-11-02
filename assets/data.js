@@ -27,28 +27,54 @@ window.ATLAS = window.ATLAS || {};
       ex: 'Snowflake Cortex Analyst and Cortex Agent, Databricks Genie over metric views, Fabric data agent, Power BI <code>GenerateQuery</code>, Looker conversational analytics, ThoughtSpot Spotter' }
   ];
 
-  A.recommend = function (who, sem, data) {
-    var biz = who === 'biz', both = who === 'both';
+  A.recommend = function (front, sem, prio, data) {
     var semStep = {
-      native: 'Query the platform’s semantic objects through a narrow tool: a stored procedure or function that takes a metric, dimensions and filters and returns aggregates.',
-      layer: 'Connect the semantic or BI tool’s MCP server and use its query tools. Leave its generate or text-to-SQL tools disabled.',
-      none: 'Write the 20 metrics people argue about most into a reviewed YAML file or dbt metrics, and serve them from a small context server.'
+      native: 'Expose the platform’s semantic objects through narrow tools: a procedure or function that takes metric, dimensions and filters and returns aggregates.',
+      layer: 'Connect the semantic or BI tool’s MCP server and use its deterministic query tools; leave its text-to-SQL or chat tools off.',
+      none: 'Define the 20 most argued-over metrics first, in the platform’s semantic object, dbt or a reviewed YAML file. Every pattern depends on this.'
     }[sem];
     var dataStep = {
-      rows: 'Read-only role, row caps and masking on PII columns, even with enterprise terms in place.',
-      agg: 'Expose only aggregate tools to the agent. Keep raw SQL off the tool list for people who should not see records.',
-      none: 'Point your client at a model you host, behind your own gateway, and avoid Smart MCP tools that may run cross-region or on a global endpoint.'
+      rows: 'Read-only role, row caps and masking on PII columns, even under enterprise terms.',
+      agg: 'Give agents aggregate-only tools; keep raw SQL off the allow-list.',
+      none: 'Run a model you host behind your own gateway, and keep Smart MCP tools that may use cross-region or global endpoints out of the path.'
     }[data];
-    if (biz) {
-      if (sem === 'none') return { llms: 2, title: 'Build the semantic model first, then add the platform agent', why: 'A Smart MCP tool on bare tables pays for a second model and still guesses. Whatever the vendor, the accuracy comes from the curated model underneath, so that is step one.',
-        steps: ['Define the core metrics in the platform’s semantic object or your BI model.', 'Then put the platform’s analyst or agent on top for business users.', dataStep, 'Budget AI usage per team and watch shared service accounts.'] };
-      return { llms: data === 'none' ? 1 : 2, title: data === 'none' ? 'Semantic model with a self-hosted chat front end' : 'Platform agent on top of your semantic model', why: data === 'none' ? 'Business users need a chat surface, but the platform agents may process data outside your region. A self-hosted model over the same semantic tools keeps everything inside.' : 'People without their own AI client need someone to run the reasoning. Here the second model earns its cost, and the semantic model keeps its numbers honest.',
-        steps: [semStep.replace('Leave its generate or text-to-SQL tools disabled.', 'Its analyst or agent tools are fine here.'), dataStep, 'Budget AI usage per team and watch shared service accounts.'] };
+    var evalStep = 'Write 30 real questions with known answers and rerun them on every change.';
+    var P = {
+      1: 'Pattern 1 · Coding agents + Plain MCP', 2: 'Pattern 2 · Coding agents + Smart MCP', 3: 'Pattern 3 · Your app on an LLM API + Plain MCP',
+      4: 'Pattern 4 · Your app + platform agent API', 5: 'Pattern 5 · MCP gateway in front of everything'
+    };
+    var pick, llms, why, steps;
+    if (front === 'mixed') {
+      pick = 5; llms = 2;
+      why = 'Different teams need different paths. A gateway gives one place for identity, allow-lists, audit and budgets, with Plain MCP for builders and Smart MCP or agent APIs for business users.';
+      steps = [semStep, 'Route coding agents and your own apps to Plain MCP tools; route business-user apps to the platform agent where it tests well.', 'Per-user OAuth through the gateway and per-team cost views.', dataStep, evalStep];
+    } else if (front === 'nollm') {
+      if (data === 'none') {
+        pick = 3; llms = 1;
+        why = 'An app without its own model would normally call the platform’s agent, but that model may run outside your region. Add a self-hosted model to the app and keep the semantic layer as tools.';
+        steps = [semStep, 'Host an open model behind your gateway and call Plain MCP tools from the app.', dataStep, evalStep];
+      } else {
+        pick = 4; llms = 1;
+        why = 'Your app has no model, so the platform’s agent is the only reasoning in the path. It is the least to build; the vendor owns quality and the bill, and you are tied to that platform.';
+        steps = [sem === 'none' ? semStep : 'Point the platform agent at your semantic model, verified queries and instructions; that is where its accuracy comes from.', 'Call the agent API with the user’s identity so row policies apply.', 'Set AI budgets and alerts per app.', evalStep];
+      }
+    } else if (front === 'app') {
+      pick = 3; llms = 1;
+      why = 'You already run a model, so a second one adds cost and another place data goes. Plain MCP over a semantic layer gives you control of model, region and spend.';
+      steps = [semStep, 'Connect remote MCP servers from your model API or agent framework, behind a gateway once you have more than one.', dataStep, evalStep];
+      if (prio === 'vendor' && data !== 'none') { why += ' Since you want the vendor to own quality, add the platform’s Smart MCP tool for the domains where it beats your eval set.'; llms = 2; }
+    } else {
+      if ((prio === 'speed' || prio === 'vendor') && data !== 'none') {
+        pick = 2; llms = 2;
+        why = prio === 'speed' ? 'Smart MCP is the quickest start: one tool call and the platform does the rest. Expect AI credits on top of your tokens, and check the semantic model behind it before you trust the numbers.' : 'Smart MCP puts answer quality on the vendor, which is what you asked for. You pay AI credits on top of your tokens, and quality still depends on the semantic model you give it.';
+        steps = [sem === 'none' ? semStep : 'Check that the Smart MCP tool reads your semantic model, not bare tables.', 'Set AI budgets per team and watch shared service accounts.', dataStep, evalStep];
+      } else {
+        pick = 1; llms = 1;
+        why = 'Your coding agent already reasons well. What it lacks is meaning, and a semantic layer supplies that deterministically with no second model on the bill.';
+        steps = [semStep, 'Put the business rules in CLAUDE.md, AGENTS.md or a skill: use the metric tools for revenue and customers, never SELECT * on customer tables.', dataStep, evalStep];
+      }
     }
-    var t = { native: 'Plain SQL MCP plus the platform’s semantic objects', layer: 'Your semantic tool’s MCP, query tools only', none: 'A small context server over metrics you define' }[sem];
-    var steps = [semStep, 'Put the business rules in CLAUDE.md, AGENTS.md or a skill: "use the metric tools for revenue and customers; never SELECT * on customer tables."', dataStep];
-    if (both) steps.push('For business users, add the platform’s agent on the same semantic model and budget it separately.');
-    return { llms: 1, title: t, why: both ? 'Developers keep one model and governed numbers. Business users get the platform agent on the same definitions, so both groups quote the same figures.' : 'Your coding agent already reasons well. What it lacks is meaning, and the semantic layer supplies that deterministically, with no second model on the bill.', steps: steps };
+    return { llms: llms, title: P[pick], why: why, steps: steps };
   };
 })(window.ATLAS);
 

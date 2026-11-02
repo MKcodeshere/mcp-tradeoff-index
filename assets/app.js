@@ -61,7 +61,7 @@
   $('#theme').addEventListener('click', function () { setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light'); });
 
   /* ---------- Routing ---------- */
-  var VIEWS = ['flow', 'matrix', 'models', 'demo', 'compare', 'exposure', 'build', 'choose', 'sources'];
+  var VIEWS = ['flow', 'patterns', 'matrix', 'models', 'demo', 'compare', 'exposure', 'build', 'choose', 'sources'];
   var explorerMounted = false;
   function show(v) {
     if (VIEWS.indexOf(v) < 0) v = 'flow';
@@ -332,9 +332,9 @@
   /* ---------- Chooser ---------- */
   var form = $('#qs');
   function recommend() {
-    var r = A.recommend(form.who.value, form.sem.value, form.data.value);
-    $('#rec').innerHTML = '<div class="eyebrow" style="color:var(--fg-3)">Recommended setup</div><h3>' + r.title + '</h3><span class="pill ' + (r.llms === 2 ? 'two' : 'one') + '">' +
-      (r.llms === 2 ? 'Smart MCP for the business-user path' : 'Plain MCP, one LLM') + '</span><p>' + r.why + '</p>' + ul(r.steps);
+    var r = A.recommend(form.front.value, form.sem.value, form.prio.value, form.data.value);
+    $('#rec').innerHTML = '<div class="eyebrow" style="color:var(--fg-3)">Recommended pattern</div><h3>' + r.title + '</h3><span class="pill ' + (r.llms === 2 ? 'two' : 'one') + '">' +
+      (r.llms === 2 ? 'Smart MCP in the path, two models' : 'One model in the path') + '</span><p>' + r.why + '</p>' + ul(r.steps);
   }
   form.addEventListener('change', recommend);
   form.addEventListener('submit', function (e) { e.preventDefault(); });
