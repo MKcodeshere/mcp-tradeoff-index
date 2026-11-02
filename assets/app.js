@@ -113,21 +113,24 @@
     if (term && JSON.stringify(p).toLowerCase().indexOf(term) < 0) return false;
     return true;
   }
+  function countCat(c) { return P.filter(function (p) { return matches(p, 'cat') && (c === 'all' || p.group === c); }).length; }
+  function countMode(m) { return P.filter(function (p) { return matches(p, 'm:' + m); }).length; }
   function updateCounts() {
-    // Category chips count what the current Show filter and search would list
+    // Category chips: count what the active Show filter and search would list.
+    // A type with nothing to show is hidden rather than offered with a 0.
     $$('#cats .chip').forEach(function (b) {
-      var c = b.dataset.c;
-      var n = P.filter(function (p) { return matches(p, 'cat') && (c === 'all' || p.group === c); }).length;
+      var n = countCat(b.dataset.c);
       $('.n', b).textContent = n;
-      b.toggleAttribute('data-zero', n === 0);
+      b.hidden = n === 0 && b.dataset.c !== 'all';
     });
-    // Show buttons count what the current category and search would list
+    // Show filters: count within the active type; a filter with no match is disabled
     $$('#show button').forEach(function (b) {
-      var n = P.filter(function (p) { return matches(p, 'm:' + b.dataset.s); }).length;
+      var n = countMode(b.dataset.s);
       var el = $('.n', b);
       if (!el) { el = document.createElement('span'); el.className = 'n'; b.appendChild(el); }
       el.textContent = n;
-      b.toggleAttribute('data-zero', n === 0);
+      b.disabled = n === 0 && b.dataset.s !== 'all';
+      b.title = b.disabled ? 'None in this product type' : '';
     });
   }
   function renderMatrix() {
@@ -155,12 +158,18 @@
   }
   $('#cats').addEventListener('click', function (e) {
     var b = e.target.closest('.chip'); if (!b) return;
-    cat = b.dataset.c; $$('#cats .chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); renderMatrix();
+    cat = b.dataset.c;
+    if (mode !== 'all' && countMode(mode) === 0) setMode('all');
+    $$('#cats .chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); renderMatrix();
   });
   $('#show').addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
-    mode = b.dataset.s; $$('#show button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); renderMatrix();
+    if (b.disabled) return;
+    setMode(b.dataset.s);
+    if (cat !== 'all' && countCat(cat) === 0) { cat = 'all'; $$('#cats .chip').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.c === 'all')); }); }
+    renderMatrix();
   });
+  function setMode(m) { mode = m; $$('#show button').forEach(function (x) { x.setAttribute('aria-pressed', String(x.dataset.s === m)); }); }
   $('#order').addEventListener('change', renderMatrix);
   $('#q').addEventListener('input', function () {
     term = this.value.trim().toLowerCase();
