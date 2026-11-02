@@ -67,7 +67,7 @@
     if (VIEWS.indexOf(v) < 0) v = 'flow';
     $$('.view').forEach(function (s) { s.hidden = s.dataset.v !== v; });
     $$('.tab').forEach(function (t) { t.setAttribute('aria-selected', String(t.dataset.view === v)); });
-    if (v === 'flow' && window.mountFlow) window.mountFlow($('#flow')); else if (window.pauseFlow) window.pauseFlow();
+    if (v === 'flow' && window.mountFlowScenes) window.mountFlowScenes($('#flow'));
     if (v === 'demo' && !explorerMounted && window.mountExplorer) { window.mountExplorer($('#explorer')); explorerMounted = true; }
   }
   window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });

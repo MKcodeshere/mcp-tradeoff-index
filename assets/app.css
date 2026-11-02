@@ -435,3 +435,7 @@ footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: s
 .fpk-ans-bad .fpk-dot { fill: var(--coral); } .fpk-ans-bad .fpk-bg { fill: var(--panel); stroke: var(--coral); } .fpk-ans-bad .fpk-label { fill: var(--coral); }
 
 .fpk-stem { stroke: var(--line-2); stroke-width: 1; stroke-dasharray: 2 3; }
+
+.fsx { display: grid; gap: 16px; }
+.fsx-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.fstage { padding: 4px 12px 14px; }

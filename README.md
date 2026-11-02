@@ -9,7 +9,7 @@ plus 17 more. Checked against vendor documentation on 2 November 2026.
 
 ## Views
 
-- **Plain vs Smart MCP**: two animated data-flow charts. Plain MCP: your client's model writes every query. Smart MCP: the platform's own model plans and writes the SQL inside the tool.
+- **Plain vs Smart MCP**: two animated product scenes built with the Stageshow kit. Pick Cursor, Claude Code, Codex or Pi. Plain MCP: your agent's model writes every query and the platform's query history shows each one arrive. Smart MCP: one tool call, and the platform agent's own trace shows its model planning and writing the SQL.
 - **MCP matrix**: every product grouped by type, with MCP status, semantic object, Smart MCP tools, the model behind them and the one-LLM route. Select a row for evidence and sources.
 - **Smart MCP models**: which provider runs the Smart MCP tools, and how each is billed.
 - **One question, three setups**: an animated demo of plain SQL MCP, semantic tools and a platform agent.
