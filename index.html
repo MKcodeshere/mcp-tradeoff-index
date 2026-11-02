@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MCP Tradeoff Index</title>
+<meta name="description" content="Which data platforms give coding agents plain MCP access, which run a second LLM behind the tool, whose model it is, how it bills, and how to add business context with one LLM.">
+<meta property="og:title" content="MCP Tradeoff Index">
+<meta property="og:description" content="Which data platforms give coding agents plain MCP access, which run a second LLM behind the tool, whose model it is, how it bills, and how to add business context with one LLM.">
+<meta name="theme-color" content="#070e1b">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 22 22'%3E%3Ccircle cx='7' cy='11' r='5.5' fill='none' stroke='%232dd4bf' stroke-width='2'/%3E%3Ccircle cx='15' cy='11' r='5.5' fill='none' stroke='%23f5b83d' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<link rel="stylesheet" href="assets/explorer.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#matrix" aria-label="MCP Tradeoff Index, home">
+      <svg width="24" height="24" viewBox="0 0 22 22" aria-hidden="true"><circle cx="7" cy="11" r="5.5" fill="none" stroke="#2dd4bf" stroke-width="2"/><circle cx="15" cy="11" r="5.5" fill="none" stroke="#f5b83d" stroke-width="2" stroke-dasharray="3 2.4"/></svg>
+      <span>MCP Tradeoff Index</span>
+    </a>
+    <label class="gsearch">
+      <span class="sr">Search products and tools</span>
+      <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="q" type="search" placeholder="Search products or tools, e.g. Denodo, Genie, execute_sql" autocomplete="off">
+    </label>
+    <button class="iconbtn" id="theme" type="button" aria-label="Switch to light theme" title="Switch theme">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 2a6 6 0 0 1 0 12z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Reference · checked 2026-11-02</div>
+      <h1>MCP on data platforms: <em>one LLM or two?</em></h1>
+      <p>Which data platforms give a coding agent plain access over MCP, which run their own LLM behind the tool, whose model that is and how it bills, and how to add business context without paying for a second model. Built on the 65-product Semantic Context Index, plus 17 more products.</p>
+    </div>
+    <div class="stats" aria-label="Summary">
+      <div><b id="s-n">0</b><span>products</span></div>
+      <div><b id="s-llm" style="color:var(--amber)">0</b><span>run a second LLM on MCP</span></div>
+      <div><b id="s-sem" style="color:var(--teal)">0</b><span>with a semantic object</span></div>
+      <div><b id="s-prov">0</b><span>model providers behind tools</span></div>
+    </div>
+  </div>
+</section>
+
+<nav class="tabs" aria-label="Views">
+  <div class="wrap" role="tablist">
+    <a class="tab" role="tab" href="#matrix" data-view="matrix">MCP matrix</a>
+    <a class="tab" role="tab" href="#models" data-view="models">Second LLM</a>
+    <a class="tab" role="tab" href="#demo" data-view="demo">One question, three setups</a>
+    <a class="tab" role="tab" href="#compare" data-view="compare">Compare</a>
+    <a class="tab" role="tab" href="#exposure" data-view="exposure">Data exposure</a>
+    <a class="tab" role="tab" href="#build" data-view="build">Add context</a>
+    <a class="tab" role="tab" href="#choose" data-view="choose">Choose a setup</a>
+    <a class="tab" role="tab" href="#sources" data-view="sources">Method and sources</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <!-- MATRIX -->
+  <section class="view" id="v-matrix" data-v="matrix" aria-labelledby="h-matrix">
+    <div class="vhead">
+      <div>
+        <h2 id="h-matrix">MCP matrix</h2>
+        <p>One row per product, grouped by type. Select a row for the tools, the model behind them, billing, the one-LLM setup and sources.</p>
+      </div>
+    </div>
+    <div class="filters">
+      <div class="chiprow" id="cats" role="group" aria-label="Product type"></div>
+      <div class="ctrlrow">
+        <div class="seg" id="show" role="group" aria-label="Show">
+          <button type="button" data-s="all" aria-pressed="true">All</button>
+          <button type="button" data-s="llm" aria-pressed="false">Second LLM on MCP</button>
+          <button type="button" data-s="plain" aria-pressed="false">Plain MCP only</button>
+          <button type="button" data-s="sem" aria-pressed="false">Has semantic object</button>
+          <button type="button" data-s="byo" aria-pressed="false">Bring your own model</button>
+        </div>
+        <label><span class="sr">Order</span>
+          <select id="order"><option value="type">Order by product type</option><option value="name">Order by name</option><option value="llm">Second LLM first</option></select>
+        </label>
+<div class="legend" aria-label="Legend">
+          <span><i class="g g-yes"></i>Yes</span>
+          <span><i class="g g-part"></i>Preview or option</span>
+          <span><i class="g g-llm"></i>Runs the vendor's LLM</span>
+          <span><i class="g g-ui"></i>LLM in product UI only</span>
+          <span><i class="g g-no"></i>No</span>
+        </div>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+    <div class="mx-wrap">
+      <table class="mx" id="mx">
+        <thead>
+          <tr>
+            <th class="grp" rowspan="1"></th>
+            <th class="grp" colspan="3">Plain access</th>
+            <th class="grp two" colspan="4">Second LLM</th>
+            <th class="grp one" colspan="1">One-LLM route</th>
+          </tr>
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">MCP server</th>
+            <th scope="col">Query tools</th>
+            <th scope="col">Semantic object</th>
+            <th scope="col">LLM tool on MCP</th>
+            <th scope="col">LLM in UI only</th>
+            <th scope="col">Model behind it</th>
+            <th scope="col">Bring your own</th>
+            <th scope="col" style="text-align:left">What to connect instead</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- MODELS -->
+  <section class="view" id="v-models" data-v="models" hidden aria-labelledby="h-models">
+    <div class="vhead"><div>
+      <h2 id="h-models">Whose model runs behind the smart tools</h2>
+      <p>When an MCP tool runs the vendor's model, your question and often your rows reach that model as well as your client's. Counts cover tools reachable over MCP, as documented on 2 November 2026.</p>
+    </div></div>
+    <div class="grid2">
+      <div class="panel pad"><div class="bars" id="bars"></div></div>
+      <div class="callout amber" style="align-self:start"><b>"Vendor model, not named"</b> means the docs describe an AI tool without naming the provider. Ask before you route regulated data through it. <b>"Vendor menu"</b> means several providers are on offer and either you or the vendor picks; check which one your tenant uses.</div>
+    </div>
+    <div class="mgrid" id="mgrid"></div>
+    <div class="vhead"><div>
+      <h2>How the second LLM is billed</h2>
+      <p>The MCP server is usually free. Plain tools cost compute; smart tools add an AI charge, and your client's tokens don't go away.</p>
+    </div></div>
+    <div id="cost"></div>
+  </section>
+
+  <!-- DEMO -->
+  <section class="view" id="v-demo" data-v="demo" hidden aria-labelledby="h-demo">
+    <div class="vhead"><div>
+      <h2 id="h-demo">One question, three setups</h2>
+      <p>"How many active customers in Chennai?" asked from a coding agent over plain SQL MCP, over semantic tools, and through a platform smart tool. Select a setup to replay it.</p>
+    </div></div>
+    <div id="explorer" aria-label="Interactive demo"></div>
+    <div class="vhead"><div>
+      <h2>Two questions place every tool</h2>
+      <p>What the agent knows, and whose model writes the query. Moving right adds meaning; moving down adds a second model. Only moving right fixes the definition problem.</p>
+    </div></div>
+    <div class="map" id="map" role="group" aria-label="Context and reasoning map">
+      <div class="map-axis">Who writes the query</div>
+      <div class="map-col"><b>Raw schema</b><span>Table and column names</span></div>
+      <div class="map-col"><b>Catalog context</b><span>Descriptions, glossary, lineage</span></div>
+      <div class="map-col"><b>Semantic layer</b><span>Governed metrics, joins, filters</span></div>
+    </div>
+    <div class="panel pad map-detail" id="map-detail" aria-live="polite"></div>
+  </section>
+
+  <!-- COMPARE -->
+  <section class="view" id="v-compare" data-v="compare" hidden aria-labelledby="h-compare">
+    <div class="vhead"><div>
+      <h2 id="h-compare">Compare products</h2>
+      <p>Pick up to three products to see their MCP tools, second-LLM tools, model, billing and one-LLM setup side by side.</p>
+    </div></div>
+    <div class="cmp-pick" id="cmp-pick"></div>
+    <div class="tbl-wrap"><table class="cmp" id="cmp"></table></div>
+  </section>
+
+  <!-- EXPOSURE -->
+  <section class="view" id="v-exposure" data-v="exposure" hidden aria-labelledby="h-exposure">
+    <div class="vhead"><div>
+      <h2 id="h-exposure">What your model provider sees</h2>
+      <p>Every byte a tool returns goes into your client's context and on to its provider. A smart tool doesn't change that: its answer still comes back to your client, and the platform's model sees the data on the way.</p>
+    </div></div>
+    <div class="grid2">
+      <div style="display:grid;gap:14px;align-content:start">
+        <div class="panel trace" role="img" aria-label="Trace of an agent sampling customer rows">
+          <div class="q">Q: How many active customers in Chennai?</div>
+          <div><span class="dim">→</span> list_tables, describe_table dim_cust</div>
+          <div><span class="dim">→</span> SELECT * FROM dim_cust LIMIT 20</div>
+          <div class="bad">  names, phones, emails now in context</div>
+          <div><span class="dim">→</span> SELECT DISTINCT cust_flg_3 …</div>
+          <div class="dim">  guessing what "active" means</div>
+          <div><span class="dim">→</span> invents a definition; finance disagrees</div>
+        </div>
+        <div class="callout">Where the platform's model runs matters too. Snowflake Cortex routes to other regions when <code>CORTEX_ENABLED_CROSS_REGION</code> allows it. Fabric data agents need cross-geo processing switched on in regions without Azure OpenAI. Check Google's conversational analytics endpoints against your residency rules.</div>
+      </div>
+      <div class="panel pad">
+        <h3 style="font-size:1.05rem;margin-bottom:6px">Controls, in the order they pay off</h3>
+        <ol class="steps">
+          <li><div><b>Metadata before rows</b><span>Write column comments and expose descriptions, glossary terms and metric definitions as tools, so the agent never samples a column to learn what it means.</span></div></li>
+          <li><div><b>Profile inside the warehouse</b><span>A <code>profile_column</code> tool returns counts, null share, min, max and masked top values. The shape without the records.</span></div></li>
+          <li><div><b>Query through the semantic layer</b><span>Metric queries return one aggregate row, not twenty customer records.</span></div></li>
+          <li><div><b>Enforce in the database</b><span>A read-only role for the MCP connection with masking and row access policies. A prompt can be ignored; a masking policy can't.</span></div></li>
+          <li><div><b>Cap what comes back</b><span>Row limits, byte limits and timeouts on the server or role, not left to the agent.</span></div></li>
+          <li><div><b>Contract and routing</b><span>Zero data retention terms with your client's provider, or route sensitive schemas to a model you host.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUILD -->
+  <section class="view" id="v-build" data-v="build" hidden aria-labelledby="h-build">
+    <div class="vhead"><div>
+      <h2 id="h-build">Add the missing context, keep one LLM</h2>
+      <p>Pick the path that matches where your definitions live today. Each keeps a single model, the one in your client, and returns governed numbers.</p>
+    </div></div>
+    <div class="subtabs" role="tablist" aria-label="Path">
+      <button class="subtab" role="tab" type="button" data-path="native" aria-selected="true"><b>Platform has a semantic object</b>Snowflake, Databricks</button>
+      <button class="subtab" role="tab" type="button" data-path="layer" aria-selected="false"><b>Metrics live in a BI or semantic tool</b>dbt, Cube, Looker, Power BI, Tableau</button>
+      <button class="subtab" role="tab" type="button" data-path="diy" aria-selected="false"><b>No semantic layer anywhere</b>ClickHouse, Redshift, Postgres, MongoDB</button>
+    </div>
+    <div id="path-body"></div>
+    <div class="build-grid">
+      <div style="display:grid;gap:12px;align-content:start">
+        <h3 style="font-size:1.1rem">Wire it into your client</h3>
+        <p style="color:var(--fg-2)">Same server, three clients. Commit the config so the team gets it, and put the rules in the file each client reads.</p>
+        <div id="client-notes"></div>
+      </div>
+      <div class="codebox" data-codebox="clients">
+        <div class="codebar" role="tablist" aria-label="Client">
+          <button class="ctab" role="tab" type="button" aria-selected="true" data-k="claude">Claude Code</button>
+          <button class="ctab" role="tab" type="button" aria-selected="false" data-k="codex">Codex</button>
+          <button class="ctab" role="tab" type="button" aria-selected="false" data-k="opencode">OpenCode</button>
+          <button class="ctab" role="tab" type="button" aria-selected="false" data-k="rules">Rules file</button>
+          <button class="copy" type="button">Copy</button>
+        </div>
+        <pre><code></code></pre>
+        <div class="note"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHOOSE -->
+  <section class="view" id="v-choose" data-v="choose" hidden aria-labelledby="h-choose">
+    <div class="vhead"><div>
+      <h2 id="h-choose">Which setup fits</h2>
+      <p>Three questions. The recommendation updates as you pick.</p>
+    </div></div>
+    <div class="chooser">
+      <form class="qs" id="qs">
+        <fieldset><legend>Who asks the questions?</legend>
+          <label class="opt"><input type="radio" name="who" id="who-dev" value="dev" checked> Engineers and analysts, from a coding agent</label>
+          <label class="opt"><input type="radio" name="who" id="who-biz" value="biz"> Business users with no AI client of their own</label>
+          <label class="opt"><input type="radio" name="who" id="who-both" value="both"> Both</label>
+        </fieldset>
+        <fieldset><legend>Where do metric definitions live today?</legend>
+          <label class="opt"><input type="radio" name="sem" id="sem-native" value="native" checked> In the platform: Snowflake semantic views, Databricks metric views</label>
+          <label class="opt"><input type="radio" name="sem" id="sem-layer" value="layer"> In a BI or semantic tool: dbt, Cube, Looker, Power BI, Tableau</label>
+          <label class="opt"><input type="radio" name="sem" id="sem-none" value="none"> Nowhere yet, or in people's heads</label>
+        </fieldset>
+        <fieldset><legend>What may leave your environment?</legend>
+          <label class="opt"><input type="radio" name="data" id="data-rows" value="rows" checked> Row-level data, under enterprise terms</label>
+          <label class="opt"><input type="radio" name="data" id="data-agg" value="agg"> Aggregates only</label>
+          <label class="opt"><input type="radio" name="data" id="data-none" value="none"> Nothing may leave our region or reach a proprietary model</label>
+        </fieldset>
+      </form>
+      <div class="rec" id="rec" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="view" id="v-sources" data-v="sources" hidden aria-labelledby="h-sources">
+    <div class="vhead"><div>
+      <h2 id="h-sources">Method and sources</h2>
+      <p>Every product row also links its own sources in the detail panel.</p>
+    </div></div>
+    <div class="method panel pad">
+      <div><h4>Method</h4><p>The 65 products and their MCP and NL-to-SQL findings come from the Semantic Context Index (checked 24 Oct 2026). Research agents added 17 products and re-checked MCP tool lists, the model behind each AI tool and billing against vendor docs on 2 Nov 2026.</p></div>
+      <div><h4>What counts as a second LLM</h4><p>A tool on the vendor's MCP server that sends your question to a model the vendor runs or you configure on the vendor side. AI features that exist only in the product's own UI are marked separately, because a coding agent never calls them.</p></div>
+      <div><h4>Corrections</h4><p>Preview features and prices change monthly. Check the linked source before a production decision, and open an issue with a primary source if a cell is wrong.</p></div>
+    </div>
+    <div class="src-grid" id="src"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>MCP Tradeoff Index · plain access or a second LLM, platform by platform</span>
+    <span>Checked 2 Nov 2026 · companion to the <a href="https://mkcodeshere.github.io/semantic-layer-compare/">Semantic Context Index</a></span>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Product details" aria-hidden="true">
+  <div class="dhead">
+    <div id="d-head"></div>
+    <button class="iconbtn" id="d-close" type="button" aria-label="Close details" style="margin-left:auto">
+      <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="dbody" id="d-body"></div>
+</aside>
+
+<script src="assets/data.js"></script>
+<script src="assets/explorer.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
